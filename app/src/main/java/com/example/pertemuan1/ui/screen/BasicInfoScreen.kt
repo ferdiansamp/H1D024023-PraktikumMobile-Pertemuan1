@@ -1,8 +1,6 @@
 package com.example.pertemuan1.ui.screen
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -11,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -22,7 +19,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -32,13 +28,14 @@ import com.example.pertemuan1.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BasicInfoScreen(onNavigateToContact:()->Unit) {
-    Scaffold(
-
-    ) {
-        paddingValues ->
+fun BasicInfoScreen(onNavigateToContact: () -> Unit) {
+    Scaffold { paddingValues ->
         Column(
-            modifier = Modifier.fillMaxSize().padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues) // Menggunakan paddingValues dari Scaffold
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
                 painter = painterResource(id = R.mipmap.ic_launcher_foreground),
@@ -70,6 +67,7 @@ fun BasicInfoScreen(onNavigateToContact:()->Unit) {
                     contentColor = MaterialTheme.colorScheme.onTertiary
                 )
             ) {
+                // Row hanya untuk menyusun Teks Misi Kami secara menyamping
                 Row(
                     modifier = Modifier.padding(16.dp),
                     verticalAlignment = Alignment.CenterVertically
@@ -81,33 +79,25 @@ fun BasicInfoScreen(onNavigateToContact:()->Unit) {
                         modifier = Modifier.weight(1f)
                     )
                     Text(
-                        text = "Memajukan UMKM Lokal:",
+                        text = "Memajukan UMKM Lokal",
                         modifier = Modifier.weight(2f)
                     )
-                    Spacer(modifier = Modifier.weight(1f))
-
-                    Button(
-                        OnClick = OnNavigateToContact,
-                        modifier = Modifier.fillMaxWidth().height(50.dp)
-                    ) {
-                        Text("Hubungi Kami", style = MaterialTheme.typography.labelLarge)
-                    }
-                    Spacer(modifier = Modifier.height(16.dp))
                 }
             }
-//            Row(
-//                modifier = Modifier.fillMaxWidth().background(Color(0xFFE0E0E0)).padding(16.dp)
-//            ) {
-//                Text(
-//                    text = "Misi Kami:",
-//                    fontWeight = FontWeight.Bold,
-//                    modifier = Modifier.weight(1f)
-//                )
-//                Text(
-//                    text = "Memajukan UMKM Lokal:",
-//                    modifier = Modifier.weight(2f)
-//                )
-//            }
+
+            // Memindahkan Spacer dan Button ke luar Card/Row agar tersusun rapi ke bawah
+            Spacer(modifier = Modifier.weight(1f)) // Mendorong tombol ke bagian paling bawah layar (opsional)
+
+            Button(
+                onClick = onNavigateToContact, // Diperbaiki: Menggunakan huruf kecil
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(50.dp)
+            ) {
+                Text("Hubungi Kami", style = MaterialTheme.typography.labelLarge)
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
         }
     }
 }
