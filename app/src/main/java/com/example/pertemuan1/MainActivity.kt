@@ -30,7 +30,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHost
+import androidx.navigation.compose.rememberNavController
+import com.example.pertemuan1.ui.screen.BasicInfoScreen
+import com.example.pertemuan1.ui.screen.HubunganKamiScreen
 import com.example.pertemuan1.ui.theme.Pertemuan1Theme
+import com.example.pertemuan1.ui.theme.Surface
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,12 +43,21 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             Pertemuan1Theme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-//                    Greeting(
-//                        name = "Android",
-//                        modifier = Modifier.padding(innerPadding)
-//                    )
-                    LayoutTentangJualan()
+                Surface(
+                    modifier = Modifier.fillMaxSize()
+                    color = MaterialTheme.colorScheme.background
+                ) {
+                    val navController = rememberNavController()
+                    NavHost(navController = navController, startDestination = "basic_info") {
+                        composable("basic_info") {
+                            BasicInfoScreen(
+                                onNavigateToContact = { navController.navigate("form_screen") }
+                            )
+                        }
+                        composable("form_screen") {
+                            HubunganKamiScreen(navController = navController)
+                        }
+                    }
                 }
             }
         }
@@ -60,52 +74,7 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
 
 @Composable
 fun LayoutTentangJualan() {
-    Column(
-        modifier = Modifier.fillMaxSize().padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Box(
-            modifier = Modifier.size(100.dp).clip(CircleShape).background(Color.Gray), contentAlignment = Alignment.Center
-        ) {
-            Column() {
-//                Image(
-//                    painter = painterResource(id = R.drawable.ic_launcher_round),
-//                    contentDescription = "Jualan".toString(),
-//                    modifier = Modifier.size(150.dp),
-//                    contentScale = ContentScale.Crop
-//                )
-                Text("Jualan", color = Color.White, fontWeight = FontWeight.Bold)
-            }
-        }
-        Spacer(modifier = Modifier.height(24.dp))
 
-        Text(
-            text = "Tentang Jualan",
-            fontSize = 24.sp,
-            fontWeight = FontWeight.Bold
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Text(
-            text = "Aplikasi Jualan adalah Platform yang mewadahi produk lokal dsbg",
-            fontSize = 16.sp,
-            modifier = Modifier.padding(horizontal = 32.dp)
-        )
-        Spacer(modifier = Modifier.height(32.dp))
-
-        Row(
-            modifier = Modifier.fillMaxWidth().background(Color(0xFFE0E0E0)).padding(16.dp)
-        ) {
-            Text(
-                text = "Misi Kami:",
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.weight(1f)
-            )
-            Text(
-                text = "Memajukan UMKM Lokal:",
-                modifier = Modifier.weight(2f)
-            )
-        }
-    }
 }
 
 @Preview(showBackground = true)
