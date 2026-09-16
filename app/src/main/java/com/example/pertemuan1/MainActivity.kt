@@ -15,7 +15,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.pertemuan1.ui.screen.BasicInfoScreen
-import com.example.pertemuan1.ui.screen.HubunganKamiScreen
+import com.example.pertemuan1.ui.screen.HubungiKamiScreen
 import com.example.pertemuan1.ui.theme.Pertemuan1Theme
 
 class MainActivity : ComponentActivity() {
@@ -37,7 +37,7 @@ class MainActivity : ComponentActivity() {
                         }
                         composable("form_screen") {
                             // 2. Hapus koma menggantung dan tambahkan parameter showSnackbar (bisa berupa lambda kosong jika tidak dipakai langsung dari sini)
-                            HubunganKamiScreen(
+                            HubungiKamiScreen (
                                 navController = navController,
                                 showSnackbar = { pesan -> /* Handle snackbar jika perlu */ }
                             )

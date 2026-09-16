@@ -39,7 +39,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HubunganKamiScreen(navController: NavController, showSnackbar: (String) -> Unit) {
+fun HubungiKamiScreen(navController: NavController, showSnackbar: (String) -> Unit) {
     var emailText by remember { mutableStateOf("") }
     var messageText by remember { mutableStateOf("") }
 
