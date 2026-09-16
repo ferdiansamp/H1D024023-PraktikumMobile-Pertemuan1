@@ -1,8 +1,8 @@
 # Laporan Praktikum Pemrograman Mobile
 
-**Nama**        : Muhammad Zaki Dzulfikar  
-**NIM**         : H1D023065  
-**Shift**       : Awal A / Akhir B  
+**Nama**        : Mohammad Ferdian Samputra
+**NIM**         : H1D024023
+**Shift**       : F / C  
 **Praktikum**   : Pemrograman Mobile
 
 ---
