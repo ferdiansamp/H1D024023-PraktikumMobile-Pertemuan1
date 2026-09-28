@@ -37,11 +37,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.pertemuan1.Greeting
 import com.example.pertemuan1.R
 import com.example.pertemuan1.data.dummy.DummyData
 import com.example.pertemuan1.data.model.Product
+import com.example.pertemuan1.ui.theme.Pertemuan1Theme
 import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -139,5 +142,24 @@ fun StatelessDetailProduct(
                 ) { Text("Tambah ke Keranjang") }
             }
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun DetailPreview() {
+    Pertemuan1Theme {
+//        StatelessDetailProduct(
+//            product = DummyData.products.firstOrNull(), // Ambil data pertama dari DummyData
+//            isLoading = false, // Set false agar bisa melihat tampilan datanya
+//            quantity = 1,
+//            onQuantityChange = {},
+//            onBackClick = {},
+//            onAddToCartClick = {}
+//        )
+        DetailProductScreen(
+            productId = 1,
+            navController = null
+        )
     }
 }
