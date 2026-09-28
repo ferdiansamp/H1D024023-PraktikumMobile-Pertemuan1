@@ -11,10 +11,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavHost
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.pertemuan1.ui.screen.BasicInfoScreen
+import com.example.pertemuan1.ui.screen.DaftarProductScreen
+import com.example.pertemuan1.ui.screen.DetailProductScreen
 import com.example.pertemuan1.ui.screen.HubungiKamiScreen
 import com.example.pertemuan1.ui.theme.Pertemuan1Theme
 
@@ -24,26 +29,44 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             Pertemuan1Theme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(), // 1. Tambahkan koma di sini
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    val navController = rememberNavController()
-                    NavHost(navController = navController, startDestination = "basic_info") {
-                        composable("basic_info") {
-                            BasicInfoScreen(
-                                onNavigateToContact = { navController.navigate("form_screen") }
-                            )
-                        }
-                        composable("form_screen") {
-                            // 2. Hapus koma menggantung dan tambahkan parameter showSnackbar (bisa berupa lambda kosong jika tidak dipakai langsung dari sini)
-                            HubungiKamiScreen (
-                                navController = navController,
-                                showSnackbar = { pesan -> /* Handle snackbar jika perlu */ }
-                            )
-                        }
+                val navController = rememberNavController()
+                NavHost(navController = navController, startDestination = "daftar_produk") {
+                    composable("daftar_produk") {
+                        DaftarProductScreen(navController = navController)
+                    }
+                    composable(
+                        route = "detail/{productId}",
+                        arguments = listOf(navArgument("productId") {
+                            type = NavType.IntType
+                        })
+                    ) { backStackEntry ->
+                        val productId = backStackEntry.arguments?.getInt("productId") ?: 0
+                        DetailProductScreen(
+                            productId = productId,
+                            navController = navController
+                        )
                     }
                 }
+//                Surface(
+//                    modifier = Modifier.fillMaxSize(), // 1. Tambahkan koma di sini
+//                    color = MaterialTheme.colorScheme.background
+//                ) {
+//                    val navController = rememberNavController()
+//                    NavHost(navController = navController, startDestination = "basic_info") {
+//                        composable("basic_info") {
+//                            BasicInfoScreen(
+//                                onNavigateToContact = { navController.navigate("form_screen") }
+//                            )
+//                        }
+//                        composable("form_screen") {
+//                            // 2. Hapus koma menggantung dan tambahkan parameter showSnackbar (bisa berupa lambda kosong jika tidak dipakai langsung dari sini)
+//                            HubungiKamiScreen (
+//                                navController = navController,
+//                                showSnackbar = { pesan -> /* Handle snackbar jika perlu */ }
+//                            )
+//                        }
+//                    }
+//                }
             }
         }
     }

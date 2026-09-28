@@ -35,3 +35,10 @@ Pertemuan kedua menekankan pada implementasi fitur interaktif dalam aplikasi mob
 **Kesimpulan Praktikum:**  
 Pertemuan ketiga membuka wawasan tentang pengembangan aplikasi mobile yang lebih kompleks. Mahasiswa belajar bagaimana mengintegrasikan berbagai komponen dan fitur untuk menciptakan aplikasi yang lebih lengkap dan bermanfaat.
 
+## 📝 Tugas Pertemuan 4
+**Tanggal**: Selasa, 22 September 2026
+
+<img src="docs/tugas-4.jpeg" height="480">
+
+**Kesimpulan Praktikum:**  
+Pertemuan keempat membuka wawasan tentang pengembangan aplikasi mobile yang lebih kompleks. Mahasiswa belajar bagaimana cara kerja dari Recomposition dan UI Lifecycle.
