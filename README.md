@@ -42,3 +42,11 @@ Pertemuan ketiga membuka wawasan tentang pengembangan aplikasi mobile yang lebih
 
 **Kesimpulan Praktikum:**  
 Pertemuan keempat membuka wawasan tentang pengembangan aplikasi mobile yang lebih kompleks. Mahasiswa belajar bagaimana cara kerja dari Recomposition dan UI Lifecycle.
+
+## 📝 Tugas Pertemuan 5
+**Tanggal**: Selasa, 29 September 2026
+
+<img src="docs/tugas-5.jpeg" height="480">
+
+**Kesimpulan Praktikum:**  
+Pertemuan kelima membuka wawasan tentang pengembangan aplikasi mobile yang lebih kompleks. Mahasiswa belajar bagaimana cara mengimplementasikan pengambilan data JSON dari server dengan menggunakan Retrofit, membuat ViewModel sebagai penghubung antar UI dan Model, dan Coil untuk mengambil gambar dari internet.

@@ -20,7 +20,7 @@ class HomeActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             Pertemuan1Theme() {
-                DaftarProductScreen()
+//                DaftarProductScreen()
             }
         }
     }

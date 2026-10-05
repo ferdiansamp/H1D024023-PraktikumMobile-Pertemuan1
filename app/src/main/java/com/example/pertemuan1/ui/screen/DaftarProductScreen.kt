@@ -46,7 +46,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.pertemuan1.R
-import com.example.pertemuan1.data.dummy.DummyData
+//import com.example.pertemuan1.data.dummy.DummyData
 import com.example.pertemuan1.data.model.Category
 import com.example.pertemuan1.data.model.Product
 import androidx.compose.runtime.getValue
@@ -54,52 +54,91 @@ import androidx.compose.runtime.setValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.pertemuan1.util.JualanConstants.BASE_URL
+import com.example.pertemuan1.viewmodel.ProductUiState
+import com.example.pertemuan1.viewmodel.ProductViewModel
 import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DaftarProductScreen(navController: androidx.navigation.NavController? = null) {
+fun DaftarProductScreen(navController: androidx.navigation.NavController? = null, viewModel: ProductViewModel) {
     val context = LocalContext.current
 
-    var selectedCategoryId by remember { mutableStateOf(DummyData.categories.firstOrNull()?.id) }
+    var selectedCategoryId by remember { mutableStateOf<Int?>(null) }
+
+    val uiState by viewModel.uiState.collectAsState()
 
     var searchQuery by remember { mutableStateOf("") }
     var isLoading by remember { mutableStateOf(false) }
     var filteredProducts by remember { mutableStateOf(emptyList<Product>()) }
 
-    LaunchedEffect(selectedCategoryId, searchQuery) {
-        isLoading = true
-
-        delay(1000)
-
-        val filteredByCategory = if (selectedCategoryId != null) {
-            DummyData.products.filter { it.category_id == selectedCategoryId }
-        } else DummyData.products
-
-        filteredProducts = if (searchQuery.isBlank()) {
-            filteredByCategory
-        } else {
-            filteredByCategory.filter { it.name.contains(searchQuery, ignoreCase = true) }
+    when(val state=uiState) {
+        is ProductUiState.Loading->{
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                CircularProgressIndicator()
+            }
         }
+        is ProductUiState.Error->{
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                Text("Error: ${state.message}", color = MaterialTheme.colorScheme.error)
+            }
+        }
+        is ProductUiState.Success-> {
+            if(selectedCategoryId == null && state.categories.isNotEmpty()) {
+                selectedCategoryId = state.categories.first().id
+            }
 
-        isLoading = false
+            val filteredByCategory = if(selectedCategoryId != null) {
+                state.products.filter { it.category_id == selectedCategoryId }
+            } else {
+                state.products
+            }
+
+            val filteredProducts = if(searchQuery.isBlank()) {
+                filteredByCategory
+            } else {
+                filteredByCategory.filter {
+                    it.name.contains(searchQuery, ignoreCase = true)
+                }
+            }
+
+            StatelessDaftarProduct(
+                categories = state.categories,
+                selectedCategoryId = selectedCategoryId,
+                onCategorySelected = { selectedCategoryId = it },
+                searchQuery = searchQuery,
+                onSearchQueryChange = { searchQuery = it },
+                isLoading = false,
+                products = filteredProducts,
+                onProductClick = { product ->
+                    navController?.navigate("detail/${product.id}")
+                },
+                onContactUsClick = {
+                    navController?.navigate("hubungi_kami")
+                }
+            )
+        }
     }
 
-    StatelessDaftarProduct(
-        categories = DummyData.categories,
-        selectedCategoryId = selectedCategoryId,
-        onCategorySelected = { selectedCategoryId = it },
-        searchQuery = searchQuery,
-        onSearchQueryChange = { searchQuery = it },
-        isLoading = isLoading,
-        products = filteredProducts,
-        onProductClick = { product ->
-            navController?.navigate("detail/${product.id}")
-        },
-        onContactUsClick = {
-            navController?.navigate("hubungi_kami")
-        }
-    )
+//    LaunchedEffect(selectedCategoryId, searchQuery) {
+//        isLoading = true
+//
+//        delay(1000)
+//
+//        val filteredByCategory = if (selectedCategoryId != null) {
+//            DummyData.products.filter { it.category_id == selectedCategoryId }
+//        } else DummyData.products
+//
+//        filteredProducts = if (searchQuery.isBlank()) {
+//            filteredByCategory
+//        } else {
+//            filteredByCategory.filter { it.name.contains(searchQuery, ignoreCase = true) }
+//        }
+//
+//        isLoading = false
+//    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -159,7 +198,7 @@ fun StatelessDaftarProduct(
                 contentPadding = PaddingValues(horizontal = 16.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                items(DummyData.categories) { category ->
+                items(categories) { category ->
                     CategoryItem(
                         category = category,
                         isSelected = category.id == selectedCategoryId,
@@ -221,14 +260,31 @@ fun ProductItemCard(product: Product, onClick: () -> Unit) {
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
     ) {
         Column(modifier = Modifier.padding(12.dp)) {
-            val imageRes = if (product.img == "dummy_product") R.drawable.dummy_product else R.drawable.dummy_product
+//            val imageRes = if (product.img == "dummy_product") R.drawable.dummy_product else R.drawable.dummy_product
+
+            val imageModel: Any = if(product.img == "dummy_product") {
+                R.drawable.dummy_product
+            } else {
+                BASE_URL + "img/${product.img}"
+            }
 
             // 1. Box HANYA untuk membungkus Gambar dan Badge Kategori
             Box(
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Image(
-                    painter = painterResource(id = imageRes),
+//                Image(
+//                    painter = painterResource(id = imageRes),
+//                    contentDescription = product.name,
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                        .aspectRatio(1f)
+//                        .clip(RoundedCornerShape(8.dp))
+//                        .background(androidx.compose.ui.graphics.Color.White),
+//                    contentScale = ContentScale.Fit
+//                )
+
+                coil.compose.AsyncImage(
+                    model = imageModel,
                     contentDescription = product.name,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -299,20 +355,20 @@ fun  CategoryItem(category: Category, isSelected: Boolean, onClick: () -> Unit) 
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun PreviewProduct() {
-    ProductItemCard(product = DummyData.products[0], onClick = {})
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewCategory() {
-    CategoryItem(category = DummyData.categories[0], isSelected = true, onClick = {})
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewDaftar() {
-    DaftarProductScreen()
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun PreviewProduct() {
+//    ProductItemCard(product = DummyData.products[0], onClick = {})
+//}
+//
+//@Preview(showBackground = true)
+//@Composable
+//fun PreviewCategory() {
+//    CategoryItem(category = DummyData.categories[0], isSelected = true, onClick = {})
+//}
+//
+//@Preview(showBackground = true)
+//@Composable
+//fun PreviewDaftar() {
+//    DaftarProductScreen()
+//}
